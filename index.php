@@ -2,20 +2,17 @@
 error_reporting(0);
 date_default_timezone_set("Asia/Taipei");
 
-// require_once('LINEBotTiny.php');
 require_once 'api/api.php';
 require_once 'functions.php';
 
-$config = parse_ini_file("/home/me/config.ini", true);
-$channelAccessToken = $config['Channel']['Token'];
-$channelSecret = $config['Channel']['Secret'];
+require_once 'config.php';
+
 $client = new LINEAPI($channelAccessToken, $channelSecret);
 $msgobj = new LINEMSG();
 
 foreach ($client->parseEvents() as $event) {
     switch ($event['type']) {
         case 'message':
-
             $message = $event['message'];
             $token = $event['replyToken'];
             $uid = $event['source']['userId'];
@@ -45,7 +42,6 @@ foreach ($client->parseEvents() as $event) {
                                 break;
                         };
                     }
-                    // $client->replyMessage($event['replyToken'], $msgobj->Text($message['text']));
                     break;
                 case 'image':
                     if ($gid != '') {
@@ -150,7 +146,7 @@ foreach ($client->parseEvents() as $event) {
                 case substr($text, 0, 6) == 'warped':
                     $mid = explode(' ', $text)[1];
                     $url = 'https://yiarashi.com/line-bk/images/' . $event['source']['userId'] . '/' . $mid . '/warped.jpg';
-                    ErrLog($url);
+                    bot_error_log($url);
                     $client->replyMessage($event['replyToken'], $msgobj->Image($url));
                 case substr($text, 0, 4) == 'heat':
                     $mid = explode(' ', $text)[1];
