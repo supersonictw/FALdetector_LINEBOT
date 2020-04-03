@@ -15,6 +15,7 @@ $msgobj = new LINEMSG();
 foreach ($client->parseEvents() as $event) {
     switch ($event['type']) {
         case 'message':
+
             $message = $event['message'];
             $token = $event['replyToken'];
             $uid = $event['source']['userId'];
@@ -134,6 +135,7 @@ foreach ($client->parseEvents() as $event) {
                     break;
             }
             break;
+
         case 'postback':
             $text = $event['postback']['data'];
             switch ($text) {
@@ -159,6 +161,7 @@ foreach ($client->parseEvents() as $event) {
                     break;
             }
             break;
+
         case 'follow': // frient add event
             $client->replyMessage($event['replyToken'], $msgobj->Template('歡迎使用!', array(
                 'type' => 'buttons',
@@ -184,10 +187,12 @@ foreach ($client->parseEvents() as $event) {
                 ),
             )));
             break;
+
         case 'join': // Group add event
             $text = 'Hi, 謝謝邀我進群組, 但我現在不支援群組功能喔!';
             $client->replyMessage($event['replyToken'], $msgobj->Text($text));
             break;
+
         default:
             error_log("Unsupporeted event type: " . $event['type']);
             break;
